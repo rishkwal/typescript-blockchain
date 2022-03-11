@@ -19,5 +19,9 @@ class Blockchain {
 
     this.newTransactions = [];
     this.chain.push(newBlock);
+
+    return newBlock;
   }
 }
+
+export default Blockchain;
