@@ -48,7 +48,7 @@ class Blockchain {
 
   hashBlock(
     previousBlockHash: string,
-    currentBlockData: block,
+    currentBlockData: transaction[],
     nonce: number
   ): string {
     const dataAsString =
@@ -57,7 +57,10 @@ class Blockchain {
     return hash;
   }
 
-  proofOfWork(previousBlockHash: string, currentBlockData: block): number {
+  proofOfWork(
+    previousBlockHash: string,
+    currentBlockData: transaction[]
+  ): number {
     let nonce = 0;
     let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
     while (hash.substr(0, 4) !== "0000") {
