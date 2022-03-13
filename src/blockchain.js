@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const sha256_1 = __importDefault(require("sha256"));
 class Blockchain {
     constructor() {
         this.chain = [];
@@ -29,6 +33,11 @@ class Blockchain {
         };
         this.pendingTransactions.push(newTransaction);
         return this.getLastBlock()["index"] + 1;
+    }
+    hashBlock(previousBlockHash, currentBlockData, nonce) {
+        const dataAsString = previousBlockHash + nonce.toString() + JSON.stringify(currentBlockData);
+        const hash = (0, sha256_1.default)(dataAsString);
+        return hash;
     }
 }
 exports.default = Blockchain;
