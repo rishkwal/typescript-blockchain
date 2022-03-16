@@ -11,7 +11,7 @@ app.get("/blockchain", (req, res) => {
   res.send("This will give us the Blockchain");
 });
 
-app.get("/transaction", (req, res) => {
+app.post("/transaction", (req, res) => {
   res.send("This will return the transaction details");
 });
 
