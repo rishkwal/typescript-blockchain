@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
-    "@types/sha256": "^0.2.0"
+    "@types/sha256": "^0.2.0",
+    "nodemon": "^2.0.15"
   }
 }
