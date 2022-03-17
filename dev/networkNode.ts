@@ -8,7 +8,7 @@ const nodeAddress = uuid().split("-").join("");
 const TScoin = new Blockchain();
 const app = express();
 
-const PORT = 4000;
+const PORT = process.argv[2];
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

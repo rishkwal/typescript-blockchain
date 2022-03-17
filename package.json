@@ -2,9 +2,9 @@
   "name": "typescript-blockchain",
   "version": "1.0.0",
   "description": "A TypeScript Blockchain",
-  "main": "src/api.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon --watch src -e js",
+    "start": "nodemon --watch src -e js src/networkNode.js 3001",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
