@@ -3,9 +3,15 @@ import sha256 from "sha256";
 class Blockchain {
   chain: block[];
   pendingTransactions: transaction[];
+  currentNodeUrl: string;
+  networkNodes: []
   constructor() {
     this.chain = [];
     this.pendingTransactions = [];
+
+    this.currentNodeUrl = process.argv[3];
+    this.networkNodes = [];
+
     this.createNewBlock(0, "0", "0"); //creating the genesis block
   }
 
