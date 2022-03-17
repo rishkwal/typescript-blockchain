@@ -10,12 +10,9 @@ const app = express();
 
 const PORT = process.argv[2];
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-app.listen(PORT, () => {
-  console.log(`Listening to port ${PORT}...`);
-});
 
 app.get("/blockchain", (req, res) => {
   res.send(TScoin);
@@ -44,4 +41,20 @@ app.get("/mine", (req, res) => {
     note: "New block mined successfully",
     block: newBlock,
   });
+});
+
+app.post('/register-and-broadcast-node', (req,res) => {
+  const newNodeUrl = req.body.newNodeUrl;
+})
+
+app.post('register-node', (req,res)=>{
+
+})
+
+app.post('/register-nodes-bulk',(req,res)=>{
+  
+})
+
+app.listen(PORT, () => {
+  console.log(`Listening to port ${PORT}...`);
 });
