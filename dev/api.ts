@@ -1,7 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import Blockchain from "./blockchain";
+import { v1 } from "uuid";
 
+const uuid = v1;
+const nodeAddress = uuid().split("-").join("");
 const TScoin = new Blockchain();
 const app = express();
 
@@ -28,5 +31,17 @@ app.post("/transaction", (req, res) => {
 });
 
 app.get("/mine", (req, res) => {
-  res.send("This will mine a block for us");
+  const lastBlock = TScoin.getLastBlock();
+  const previousBlockHash = lastBlock["hash"];
+  const currentBlockData = TScoin.pendingTransactions;
+  const nonce = TScoin.proofOfWork(previousBlockHash, currentBlockData);
+  const hash = TScoin.hashBlock(previousBlockHash, currentBlockData, nonce);
+
+  TScoin.createNewTransaction(12.5, "00", nodeAddress);
+
+  const newBlock = TScoin.createNewBlock(nonce, previousBlockHash, hash);
+  res.json({
+    note: "New block mined successfully",
+    block: newBlock,
+  });
 });
