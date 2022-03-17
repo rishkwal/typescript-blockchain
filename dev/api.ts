@@ -1,5 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
+import Blockchain from "./blockchain";
+
+const TScoin = new Blockchain();
 const app = express();
 
 const PORT = 4000;
@@ -12,12 +15,16 @@ app.listen(PORT, () => {
 });
 
 app.get("/blockchain", (req, res) => {
-  res.send("This will give us the Blockchain");
+  res.send(TScoin);
 });
 
 app.post("/transaction", (req, res) => {
-  console.log(req.body.test);
-  res.send("This will return the transaction details");
+  const blockIndex = TScoin.createNewTransaction(
+    req.body.amount,
+    req.body.sender,
+    req.body.recipient
+  );
+  res.json({ note: `Transaction will be added in block ${blockIndex}` });
 });
 
 app.get("/mine", (req, res) => {
