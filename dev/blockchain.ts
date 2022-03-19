@@ -4,7 +4,7 @@ class Blockchain {
   chain: block[];
   pendingTransactions: transaction[];
   currentNodeUrl: string;
-  networkNodes: []
+  networkNodes: string[]
   constructor() {
     this.chain = [];
     this.pendingTransactions = [];

@@ -44,7 +44,13 @@ app.get("/mine", (req, res) => {
 });
 
 app.post('/register-and-broadcast-node', (req,res) => {
-  const newNodeUrl = req.body.newNodeUrl;
+  const newNodeUrl:string = req.body.newNodeUrl;
+  if(TScoin.networkNodes.indexOf(newNodeUrl) == -1)
+    TScoin.networkNodes.push(newNodeUrl);
+  
+  TScoin.networkNodes.forEach(networkNodeUrl => {
+    //register-node
+  })
 })
 
 app.post('register-node', (req,res)=>{
