@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import Blockchain from "./blockchain";
 import { v1 } from "uuid";
+import re from 'request-promise';
 
 const uuid = v1;
 const nodeAddress = uuid().split("-").join("");
@@ -49,7 +50,12 @@ app.post('/register-and-broadcast-node', (req,res) => {
     TScoin.networkNodes.push(newNodeUrl);
   
   TScoin.networkNodes.forEach(networkNodeUrl => {
-    //register-node
+    const requestOptions = {
+        uri: networkNodeUrl + '/register-node',
+        method: 'POST',
+        body: {newNodeUrl: newNodeUrl},
+        json: true
+      };
   })
 })
 
