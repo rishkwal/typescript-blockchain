@@ -63,7 +63,16 @@ app.post('/register-and-broadcast-node', (req,res) => {
   });
   Promise.all(regNodesPromises)
   .then(data=>{
-      //use this data...
+      const bulkRegisterOptions = {
+        uri: newNodeUrl + '/register-nodes-bulk',
+        method: 'POST',
+        body: { allNetworkNodes: [...TScoin.networkNodes, TScoin.currentNodeUrl]},
+        json: true
+      };
+
+      return requestPromise(bulkRegisterOptions);
+  }).then(data => {
+    res.json({note: 'New node registered with network sucessfully'})
   })
 
 
