@@ -2,7 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import Blockchain from "./blockchain";
 import { v1 } from "uuid";
-import re from 'request-promise';
+import requestPromise from 'request-promise';
+import { Request } from "request";
 
 const uuid = v1;
 const nodeAddress = uuid().split("-").join("");
@@ -49,6 +50,7 @@ app.post('/register-and-broadcast-node', (req,res) => {
   if(TScoin.networkNodes.indexOf(newNodeUrl) == -1)
     TScoin.networkNodes.push(newNodeUrl);
   
+  var regNodesPromises: Request[] = [] ;
   TScoin.networkNodes.forEach(networkNodeUrl => {
     const requestOptions = {
         uri: networkNodeUrl + '/register-node',
@@ -56,7 +58,15 @@ app.post('/register-and-broadcast-node', (req,res) => {
         body: {newNodeUrl: newNodeUrl},
         json: true
       };
+
+      regNodesPromises.push(requestPromise(requestOptions));
+  });
+  Promise.all(regNodesPromises)
+  .then(data=>{
+      //use this data...
   })
+
+
 })
 
 app.post('register-node', (req,res)=>{
