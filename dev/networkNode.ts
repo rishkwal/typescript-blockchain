@@ -79,7 +79,11 @@ app.post('/register-and-broadcast-node', (req,res) => {
 })
 
 app.post('register-node', (req,res)=>{
-
+  const newNodeUrl = req.body.newNodeUrl;
+  const nodeNotAlreadyPresent = TScoin.networkNodes.indexOf(newNodeUrl) == -1;
+  const notCurrentNode = TScoin.currentNodeUrl !== newNodeUrl;
+  if (nodeNotAlreadyPresent && notCurrentNode) TScoin.networkNodes.push(newNodeUrl);
+  res.json({note: 'New node successfully registered.'})
 })
 
 app.post('/register-nodes-bulk',(req,res)=>{
