@@ -74,11 +74,9 @@ app.post('/register-and-broadcast-node', (req,res) => {
   }).then(data => {
     res.json({note: 'New node registered with network sucessfully'})
   })
+});
 
-
-})
-
-app.post('register-node', (req,res)=>{
+app.post('/register-node', (req,res)=>{
   const newNodeUrl = req.body.newNodeUrl;
   const nodeNotAlreadyPresent = TScoin.networkNodes.indexOf(newNodeUrl) == -1;
   const notCurrentNode = TScoin.currentNodeUrl !== newNodeUrl;
@@ -87,7 +85,14 @@ app.post('register-node', (req,res)=>{
 })
 
 app.post('/register-nodes-bulk',(req,res)=>{
-  
+  const allNetworkNodes: string[] = req.body.allNetworkNodes;
+  allNetworkNodes.forEach(networkNodeUrl => {
+    const nodeNotAlreadyPresent = TScoin.networkNodes.indexOf(networkNodeUrl) == -1;
+    const notCurrentNode = TScoin.currentNodeUrl !== networkNodeUrl;
+    if(nodeNotAlreadyPresent && notCurrentNode)
+      TScoin.networkNodes.push(networkNodeUrl);
+  });
+
 })
 
 app.listen(PORT, () => {
