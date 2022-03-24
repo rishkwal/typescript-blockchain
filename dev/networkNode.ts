@@ -81,7 +81,7 @@ app.post('/register-node', (req,res)=>{
   const nodeNotAlreadyPresent = TScoin.networkNodes.indexOf(newNodeUrl) == -1;
   const notCurrentNode = TScoin.currentNodeUrl !== newNodeUrl;
   if (nodeNotAlreadyPresent && notCurrentNode) TScoin.networkNodes.push(newNodeUrl);
-  res.json({note: 'New node successfully registered.'})
+  res.json({note: `Node url:'${newNodeUrl}' successfully registered.`})
 })
 
 app.post('/register-nodes-bulk',(req,res)=>{
