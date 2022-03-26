@@ -11,4 +11,5 @@ export type transaction = {
   amount: number;
   sender: string;
   recipient: string;
+  transactionId: string;
 };

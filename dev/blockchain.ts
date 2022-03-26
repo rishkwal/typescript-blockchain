@@ -1,5 +1,7 @@
 import { block, transaction } from "./types";
 import sha256 from "sha256";
+import {v1} from "uuid";
+
 class Blockchain {
   chain: block[];
   pendingTransactions: transaction[];
@@ -43,14 +45,19 @@ class Blockchain {
     amount: number,
     sender: string,
     recipient: string
-  ): number {
+  ): transaction {
     const newTransaction = {
       amount: amount,
       sender: sender,
       recipient: recipient,
+      transactionId: v1().split('-').join('')
     };
-    this.pendingTransactions.push(newTransaction);
-    return this.getLastBlock()["index"] + 1;
+    return newTransaction;
+  };
+
+  addTransactionsToPendingTransactions(transactionObj: transaction){
+    this.pendingTransactions.push(transactionObj);
+    return this.getLastBlock()['index']-1;
   }
 
   hashBlock(
