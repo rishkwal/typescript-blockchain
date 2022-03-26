@@ -20,11 +20,9 @@ app.get("/blockchain", (req, res) => {
 });
 
 app.post("/transaction", (req, res) => {
-  const blockIndex = TScoin.createNewTransaction(
-    req.body.amount,
-    req.body.sender,
-    req.body.recipient
-  );
+  const newTransaction = req.body;
+  const blockIndex =
+    TScoin.addTransactionsToPendingTransactions(newTransaction);
   res.json({ note: `Transaction will be added in block ${blockIndex}` });
 });
 
