@@ -91,6 +91,24 @@ app.get("/mine", (req, res) => {
     });
 });
 
+app.post("/receive-new-block", (req, res) => {
+  const newBlock = req.body.newBlock;
+  const lastBlock = TScoin.getLastBlock();
+  const correctHash = lastBlock.hash === newBlock.previousBlockHash;
+  const correctIndex = lastBlock["index"] + 1 === newBlock["index"];
+
+  if (correctHash && correctIndex) {
+    TScoin.chain.push(newBlock);
+    TScoin.pendingTransactions = [];
+    res.json({
+      note: "New block received and accepted",
+      newBlock: newBlock,
+    });
+  } else {
+    res.json({ note: "New Block Rejected", newBlock: newBlock });
+  }
+});
+
 app.post("/register-and-broadcast-node", (req, res) => {
   const newNodeUrl: string = req.body.newNodeUrl;
   if (TScoin.networkNodes.indexOf(newNodeUrl) == -1)
