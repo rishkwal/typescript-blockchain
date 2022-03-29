@@ -55,13 +55,40 @@ app.get("/mine", (req, res) => {
   const nonce = TScoin.proofOfWork(previousBlockHash, currentBlockData);
   const hash = TScoin.hashBlock(previousBlockHash, currentBlockData, nonce);
 
-  TScoin.createNewTransaction(12.5, "00", nodeAddress);
-
   const newBlock = TScoin.createNewBlock(nonce, previousBlockHash, hash);
-  res.json({
-    note: "New block mined successfully",
-    block: newBlock,
+
+  const requestPromises: Request[] = [];
+  TScoin.networkNodes.forEach((networkNodeUrl) => {
+    const requestOptions = {
+      uri: networkNodeUrl + "/receive-new-block",
+      method: "POST",
+      body: { newBlock: newBlock },
+      json: true,
+    };
+
+    requestPromises.push(requestPromise(requestOptions));
   });
+
+  Promise.all(requestPromises)
+    .then((data) => {
+      const requestOptions = {
+        uri: (TScoin.currentNodeUrl = "/transaction/broadcast"),
+        method: "POST",
+        body: {
+          amount: 12.5,
+          sender: "00",
+          recipient: nodeAddress,
+        },
+        json: true,
+      };
+      return requestPromise(requestOptions);
+    })
+    .then((data) => {
+      res.json({
+        note: "New block mined successfully",
+        block: newBlock,
+      });
+    });
 });
 
 app.post("/register-and-broadcast-node", (req, res) => {
@@ -116,6 +143,7 @@ app.post("/register-nodes-bulk", (req, res) => {
     if (nodeNotAlreadyPresent && notCurrentNode)
       TScoin.networkNodes.push(networkNodeUrl);
   });
+  res.json({ note: "Bulk nodes registered" });
 });
 
 app.listen(PORT, () => {
