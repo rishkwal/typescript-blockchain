@@ -164,6 +164,32 @@ app.post("/register-nodes-bulk", (req, res) => {
   res.json({ note: "Bulk nodes registered" });
 });
 
+app.get("/consensus", (req, res) => {
+  const requestPromises: Request[] = [];
+  TScoin.networkNodes.forEach((networkNodeUrl) => {
+    const requestOptions = {
+      uri: networkNodeUrl + "/blockchain",
+      method: "GET",
+      json: true,
+    };
+    requestPromises.push(requestPromise(requestOptions));
+  });
+  Promise.all(requestPromises).then((blockchains: any) => {
+    const currentChainLength = TScoin.chain.length;
+    let maxChainLength = currentChainLength;
+    let newLongestChain = null;
+    let newPendingTransactions = null;
+
+    blockchains.forEach((blockchain: any) => {
+      if (blockchain.chain.length > maxChainLength) {
+        maxChainLength = blockchain.chain.length;
+        newLongestChain = blockchain.chain;
+        newPendingTransactions = blockchain.pendingTransactions;
+      }
+    });
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Listening to port ${PORT}...`);
 });
