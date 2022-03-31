@@ -94,13 +94,12 @@ class Blockchain {
         currentBlock["transactions"],
         currentBlock["nonce"]
       );
-
       if (blockHash.substring(0, 4) !== "0000") validChain = false;
       if (currentBlock["previousBlockHash"] !== prevBlock["hash"])
         validChain = false;
     }
     const genesisBlock = blockchain[0];
-    const correctNonce = genesisBlock["nonce"] === 100;
+    const correctNonce = genesisBlock["nonce"] === 0;
     const correctPreviousBlockHash = genesisBlock["previousBlockHash"] === "0";
     const correctHash = genesisBlock["hash"] === "0";
     const correctTransactions = genesisBlock["transactions"].length === 0;

@@ -72,7 +72,7 @@ app.get("/mine", (req, res) => {
   Promise.all(requestPromises)
     .then((data) => {
       const requestOptions = {
-        uri: (TScoin.currentNodeUrl = "/transaction/broadcast"),
+        uri: TScoin.currentNodeUrl + "/transaction/broadcast",
         method: "POST",
         body: {
           amount: 12.5,
