@@ -4,6 +4,8 @@ import Blockchain from "./blockchain";
 import { v1 } from "uuid";
 import requestPromise from "request-promise";
 import { Request } from "request";
+import { toEditorSettings } from "typescript";
+import { block, transaction } from "./types";
 
 const uuid = v1;
 const nodeAddress = uuid().split("-").join("");
@@ -178,7 +180,7 @@ app.get("/consensus", (req, res) => {
     const currentChainLength = TScoin.chain.length;
     let maxChainLength = currentChainLength;
     let newLongestChain = null;
-    let newPendingTransactions = null;
+    let newPendingTransactions: transaction[] = [];
 
     blockchains.forEach((blockchain: any) => {
       if (blockchain.chain.length > maxChainLength) {
@@ -187,6 +189,22 @@ app.get("/consensus", (req, res) => {
         newPendingTransactions = blockchain.pendingTransactions;
       }
     });
+    if (
+      !newLongestChain ||
+      (newLongestChain && TScoin.chainIsValid(newLongestChain))
+    ) {
+      res.json({
+        note: "Current chain has not been replaced",
+        chain: TScoin.chain,
+      });
+    } else if (newLongestChain && TScoin.chainIsValid(newLongestChain)) {
+      TScoin.chain = newLongestChain;
+      TScoin.pendingTransactions = newPendingTransactions;
+      res.json({
+        note: "This chain has been replaced",
+        chain: TScoin.chain,
+      });
+    }
   });
 });
 
