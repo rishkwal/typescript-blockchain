@@ -1,12 +1,12 @@
 import { block, transaction } from "./types";
 import sha256 from "sha256";
-import {v1} from "uuid";
+import { v1 } from "uuid";
 
 class Blockchain {
   chain: block[];
   pendingTransactions: transaction[];
   currentNodeUrl: string;
-  networkNodes: string[]
+  networkNodes: string[];
   constructor() {
     this.chain = [];
     this.pendingTransactions = [];
@@ -50,14 +50,14 @@ class Blockchain {
       amount: amount,
       sender: sender,
       recipient: recipient,
-      transactionId: v1().split('-').join('')
+      transactionId: v1().split("-").join(""),
     };
     return newTransaction;
-  };
+  }
 
-  addTransactionsToPendingTransactions(transactionObj: transaction){
+  addTransactionsToPendingTransactions(transactionObj: transaction) {
     this.pendingTransactions.push(transactionObj);
-    return this.getLastBlock()['index']-1;
+    return this.getLastBlock()["index"] - 1;
   }
 
   hashBlock(
@@ -82,6 +82,38 @@ class Blockchain {
       hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
     }
     return nonce;
+  }
+
+  chainIsValid(blockchain: block[]) {
+    let validChain = true;
+    for (var i = 1; i < blockchain.length; i++) {
+      const currentBlock = blockchain[i];
+      const prevBlock = blockchain[i - 1];
+      const blockHash = this.hashBlock(
+        prevBlock["hash"],
+        currentBlock["transactions"],
+        currentBlock["nonce"]
+      );
+
+      if (blockHash.substring(0, 4) !== "0000") validChain = false;
+      if (currentBlock["previousBlockHash"] !== prevBlock["hash"])
+        validChain = false;
+    }
+    const genesisBlock = blockchain[0];
+    const correctNonce = genesisBlock["nonce"] === 100;
+    const correctPreviousBlockHash = genesisBlock["previousBlockHash"] === "0";
+    const correctHash = genesisBlock["hash"] === "0";
+    const correctTransactions = genesisBlock["transactions"].length === 0;
+
+    if (
+      !correctNonce ||
+      !correctPreviousBlockHash ||
+      !correctHash ||
+      !correctTransactions
+    )
+      validChain = false;
+
+    return validChain;
   }
 }
 
