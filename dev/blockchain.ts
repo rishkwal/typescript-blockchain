@@ -114,6 +114,14 @@ class Blockchain {
 
     return validChain;
   }
+
+  getBlock(blockHash: string) {
+    let correctBlock = null;
+    this.chain.forEach((block) => {
+      if (block.hash === blockHash) correctBlock = block;
+    });
+    return correctBlock;
+  }
 }
 
 export default Blockchain;
