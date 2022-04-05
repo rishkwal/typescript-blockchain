@@ -4,7 +4,6 @@ import Blockchain from "./blockchain";
 import { v1 } from "uuid";
 import requestPromise from "request-promise";
 import { Request } from "request";
-import { toEditorSettings } from "typescript";
 import { block, transaction } from "./types";
 
 const uuid = v1;
@@ -207,6 +206,12 @@ app.get("/consensus", (req, res) => {
     }
   });
 });
+
+app.get("/block/:blockHash", (req, res) => {});
+
+app.get("/transaction/:transactionId", (req, res) => {});
+
+app.get("/address/:address", (req, res) => {});
 
 app.listen(PORT, () => {
   console.log(`Listening to port ${PORT}...`);
