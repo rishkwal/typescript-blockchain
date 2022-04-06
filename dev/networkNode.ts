@@ -224,7 +224,13 @@ app.get("/transaction/:transactionId", (req, res) => {
   });
 });
 
-app.get("/address/:address", (req, res) => {});
+app.get("/address/:address", (req, res) => {
+  const address = req.params.address;
+  const addressData = TScoin.getAddressData(address);
+  res.json({
+    addressData: addressData,
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Listening to port ${PORT}...`);
