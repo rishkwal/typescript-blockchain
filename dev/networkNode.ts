@@ -215,7 +215,14 @@ app.get("/block/:blockHash", (req, res) => {
   });
 });
 
-app.get("/transaction/:transactionId", (req, res) => {});
+app.get("/transaction/:transactionId", (req, res) => {
+  const transactionId = req.params.transactionId;
+  const transactionData = TScoin.getTransaction(transactionId);
+  res.json({
+    transaction: transactionData.transaction,
+    block: transactionData.block,
+  });
+});
 
 app.get("/address/:address", (req, res) => {});
 
